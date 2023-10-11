@@ -1,10 +1,10 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getIntrospectionQuery = getIntrospectionQuery;
-
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+exports.getIntrospectionQuery = void 0;
+/**
+ * Produce the GraphQL query recommended for a full schema introspection.
+ * Accepts optional IntrospectionOptions.
+ */
 function getIntrospectionQuery(options) {
   const optionsWithDefault = {
     descriptions: true,
@@ -12,17 +12,21 @@ function getIntrospectionQuery(options) {
     directiveIsRepeatable: false,
     schemaDescription: false,
     inputValueDeprecation: false,
-    ...options
+    ...options,
   };
   const descriptions = optionsWithDefault.descriptions ? 'description' : '';
-  const specifiedByUrl = optionsWithDefault.specifiedByUrl ? 'specifiedByUrl' : '';
-  const directiveIsRepeatable = optionsWithDefault.directiveIsRepeatable ? 'isRepeatable' : '';
-  const schemaDescription = optionsWithDefault.schemaDescription ? descriptions : '';
-
+  const specifiedByUrl = optionsWithDefault.specifiedByUrl
+    ? 'specifiedByURL'
+    : '';
+  const directiveIsRepeatable = optionsWithDefault.directiveIsRepeatable
+    ? 'isRepeatable'
+    : '';
+  const schemaDescription = optionsWithDefault.schemaDescription
+    ? descriptions
+    : '';
   function inputDeprecation(str) {
     return optionsWithDefault.inputValueDeprecation ? str : '';
   }
-
   return `
     query IntrospectionQuery {
       __schema {
@@ -112,6 +116,14 @@ function getIntrospectionQuery(options) {
                   ofType {
                     kind
                     name
+                    ofType {
+                      kind
+                      name
+                      ofType {
+                        kind
+                        name
+                      }
+                    }
                   }
                 }
               }
@@ -122,3 +134,4 @@ function getIntrospectionQuery(options) {
     }
   `;
 }
+exports.getIntrospectionQuery = getIntrospectionQuery;

@@ -1,7 +1,7 @@
-import { invariant } from "../jsutils/invariant.mjs";
-import { parse } from "../language/parser.mjs";
-import { executeSync } from "../execution/execute.mjs";
-import { getIntrospectionQuery } from "./getIntrospectionQuery.mjs";
+import { invariant } from '../jsutils/invariant.mjs';
+import { parse } from '../language/parser.mjs';
+import { executeSync } from '../execution/execute.mjs';
+import { getIntrospectionQuery } from './getIntrospectionQuery.mjs';
 /**
  * Build an IntrospectionQuery from a GraphQLSchema
  *
@@ -11,20 +11,16 @@ import { getIntrospectionQuery } from "./getIntrospectionQuery.mjs";
  * This is the inverse of buildClientSchema. The primary use case is outside
  * of the server context, for instance when doing schema comparisons.
  */
-
 export function introspectionFromSchema(schema, options) {
   const optionsWithDefaults = {
     specifiedByUrl: true,
     directiveIsRepeatable: true,
     schemaDescription: true,
     inputValueDeprecation: true,
-    ...options
+    ...options,
   };
   const document = parse(getIntrospectionQuery(optionsWithDefaults));
-  const result = executeSync({
-    schema,
-    document
-  });
-  !result.errors && result.data || invariant(0);
+  const result = executeSync({ schema, document });
+  (result.errors == null && result.data != null) || invariant(false);
   return result.data;
 }
